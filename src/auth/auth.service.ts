@@ -1,4 +1,9 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bycrypt from "bcryptjs";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
@@ -10,6 +15,25 @@ export class AuthService {
     private readonly userService: UsersService,
     private readonly jwtService: JwtService
   ) {}
+  private async generationToken(user: User) {
+    const payload = { email: user.email, id: user.id };
+    return {
+      token: this.jwtService.sign(payload),
+    };
+  }
+  private async checkDataUser(userDto: CreateUserDto) {
+    const user = await this.userService.getUsersByEmail(userDto.email);
+    const passwordEqual = await bycrypt.compare(
+      userDto.password,
+      user.password
+    );
+
+    if (user && passwordEqual) {
+      return user;
+    }
+
+    throw new UnauthorizedException({ message: "Некорректно введены данные" });
+  }
   async registration(userDto: CreateUserDto) {
     const candidate = await this.userService.getUsersByEmail(userDto.email);
     if (candidate) {
@@ -26,12 +50,8 @@ export class AuthService {
     return this.generationToken(user);
   }
 
-  async generationToken(user: User) {
-    const payload = { email: user.email, id: user.id };
-    return {
-      token: this.jwtService.sign(payload),
-    };
+  async login(userDto: CreateUserDto) {
+    const user = await this.checkDataUser(userDto);
+    return this.generationToken(user);
   }
-
-  async login(userDto: CreateUserDto) {}
 }
