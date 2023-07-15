@@ -24,12 +24,12 @@ export class AuthGuard implements CanActivate {
     let payload;
     try {
       payload = this.jwtService.verify(token);
-      request.user = payload;
-      return true;
+      request["user"] = payload;
     } catch (err) {
       throw new UnauthorizedException({
         message: "У вас нет доступа к этой странице",
       });
     }
+    return true;
   }
 }
