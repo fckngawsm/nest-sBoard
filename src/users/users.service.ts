@@ -42,4 +42,9 @@ export class UsersService {
       );
     }
   }
+
+  async deleteMyAccount(id: string) {
+    await this.userRepository.delete(id);
+    return `Пользователь с id ${id} был успешно удален`;
+  }
 }
