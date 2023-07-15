@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { ObjectId, Repository } from "typeorm";
 import { User } from "./users.model";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 
 @Injectable()
 export class UsersService {
@@ -26,8 +27,19 @@ export class UsersService {
     return user;
   }
 
-  async getCurrentUser(userId: number) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    return user;
+  async updateUsersData(id: string, user: UpdateUserDto) {
+    try {
+      const updateData = await this.userRepository.update(id, user);
+      return {
+        success: true,
+        message: "Successfully updated profile",
+        data: updateData,
+      };
+    } catch (error) {
+      throw new HttpException(
+        `Пользователя с id ${id} не существует`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
   }
 }
