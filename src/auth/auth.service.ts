@@ -16,8 +16,10 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
   private async generationToken(user: User) {
+    const { password, ...userData } = user;
     return {
-      token: this.jwtService.sign({id: user.id }),
+      user: userData,
+      token: this.jwtService.sign({ id: user.id }),
     };
   }
   private async checkDataUser(userDto: CreateUserDto) {
@@ -51,8 +53,6 @@ export class AuthService {
 
   async login(userDto: CreateUserDto) {
     const user = await this.checkDataUser(userDto);
-    console.log(user)
     return this.generationToken(user);
   }
-
 }
