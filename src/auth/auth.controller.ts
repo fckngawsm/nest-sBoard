@@ -10,6 +10,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "./auth.guard";
+import { LoginUserDto } from "src/users/dto/login-user.dto";
 
 @ApiTags("Авторизация")
 @Controller("auth")
@@ -22,7 +23,7 @@ export class AuthController {
   }
   // login
   @Post("/sign-in")
-  login(@Body() userDto: CreateUserDto) {
+  login(@Body() userDto: LoginUserDto) {
     return this.userService.login(userDto);
   }
   // login-check

@@ -12,7 +12,7 @@ export class ValidationPipe implements PipeTransform<any> {
     const object = plainToInstance(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
-      throw new ValidationException('Validation failed');
+      throw new ValidationException(errors);
     }
     return value;
   }

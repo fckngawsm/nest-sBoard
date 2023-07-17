@@ -7,6 +7,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import * as bycrypt from "bcryptjs";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
+import { LoginUserDto } from "src/users/dto/login-user.dto";
 import { User } from "src/users/users.model";
 import { UsersService } from "src/users/users.service";
 @Injectable()
@@ -22,7 +23,7 @@ export class AuthService {
       token: this.jwtService.sign({ id: user.id }),
     };
   }
-  private async checkDataUser(userDto: CreateUserDto) {
+  private async checkDataUser(userDto: LoginUserDto) {
     const user = await this.userService.getUsersByEmail(userDto.email);
     const passwordEqual = await bycrypt.compare(
       userDto.password,
@@ -51,7 +52,7 @@ export class AuthService {
     return this.generationToken(user);
   }
 
-  async login(userDto: CreateUserDto) {
+  async login(userDto: LoginUserDto) {
     const user = await this.checkDataUser(userDto);
     return this.generationToken(user);
   }
