@@ -55,4 +55,9 @@ export class AuthService {
     const user = await this.checkDataUser(userDto);
     return this.generationToken(user);
   }
+
+  async currentUser(id: string) {
+    const user = await this.userService.getUsersById(id);
+    return user;
+  }
 }

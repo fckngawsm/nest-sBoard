@@ -13,14 +13,15 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const headers = request.headers.authorization;
+    const {authorization} = request.headers;
+    console.log(request.headers, 'headr!')
     const bearer = "Bearer ";
-    if (!headers || !headers.startsWith(bearer)) {
+    if (!authorization || !authorization.startsWith(bearer)) {
       throw new UnauthorizedException({
         message: "У вас нет доступа к этой странице",
       });
     }
-    const token = headers.replace(bearer, "");
+    const token = authorization.replace(bearer, "");
     let payload;
     try {
       payload = this.jwtService.verify(token);

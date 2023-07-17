@@ -38,16 +38,16 @@ export class UsersController {
   @ApiOperation({ summary: "Обновление пользователя" })
   @ApiResponse({ status: 200, type: UpdateUserDto })
   @UseGuards(AuthGuard)
-  @Patch()
-  async update(@Body() userDto: UpdateUserDto, @Req() request) {
-    const { id } = request.user;
+  @Patch("/me/information")
+  async update(@Body() userDto: UpdateUserDto, @Req() req) {
+    const { id } = req.user;
     await this.usersService.updateUsersData(id, userDto);
     return userDto;
   }
   // delete user
   @ApiOperation({ summary: "Удаление своего аккаунта" })
   @UseGuards(AuthGuard)
-  @Delete()
+  @Delete("/me")
   async delete(@Req() request) {
     const { id } = request.user;
     return this.usersService.deleteMyAccount(id);

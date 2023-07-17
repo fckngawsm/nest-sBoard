@@ -27,6 +27,13 @@ export class UsersService {
     return user;
   }
 
+  async getUsersById(id: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    console.log(id, "id");
+    console.log(user, "user");
+    return user;
+  }
+
   async updateUsersData(id: string, user: UpdateUserDto) {
     try {
       const updateData = await this.userRepository.update(id, user);

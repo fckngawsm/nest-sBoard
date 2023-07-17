@@ -27,8 +27,9 @@ export class AuthController {
   }
   // login-check
   @UseGuards(AuthGuard)
-  @Get("/login-check")
+  @Get("/me")
   loginCheck(@Request() req) {
-    return req.user;
+    const { id } = req.user;
+    return this.userService.currentUser(id);
   }
 }
