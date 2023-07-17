@@ -11,9 +11,11 @@ import {
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UsersService } from "./users.service";
 import { User } from "./users.model";
+import { UsePipes , ValidationPipe } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
 import { UpdateUserDto } from "./dto/update-user.dto";
+// import { ValidationPipe } from "src/pipes/validation.pipe";
 
 @ApiTags("Пользователи")
 @Controller("users")
@@ -22,6 +24,7 @@ export class UsersController {
   // create user
   @ApiOperation({ summary: "Создание пользователя" })
   @ApiResponse({ status: 201, type: User })
+  // @UsePipes(ValidationPipe)
   @Post()
   create(@Body() user: CreateUserDto) {
     return this.usersService.createUser(user);

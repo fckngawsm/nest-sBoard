@@ -1,10 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsString, Length, IsEmail } from "class-validator";
 export class UpdateUserDto {
   // name
   @ApiProperty({ example: "Kirill", description: "Имя пользователя" })
+  @IsString({ message: "Должно быть строкой" })
+  @Length(2, 40, {
+    message: "Фамилия должен быть не меньше 7 и не больше 40 символов",
+  })
   name: string;
   // lastName
   @ApiProperty({ example: "Marchenko", description: "Фамилия" })
+  @IsString({ message: "Должно быть строкой" })
+  @Length(5, 40, {
+    message: "Фамилия должен быть не меньше 7 и не больше 40 символов",
+  })
   lastName: string;
   // avatar
   @ApiProperty({
